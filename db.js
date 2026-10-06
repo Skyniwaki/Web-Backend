@@ -6,9 +6,11 @@ async function getGames({ category, q, sort, editors_pick, limit }) {
     .from('games')
     .select('*');
 
-  // Filter category
+  // Filter category — ต้อง match แบบตรงตัวเต็ม ไม่ใช่ substring
+  // เดิมใช้ ilike('%category%') ทำให้ category=Action ไปตรงกับ 'Action RPG' ด้วย
+  // จึงได้ผลลัพธ์มากกว่าจำนวนที่ /api/categories รายงาน
   if (category) {
-    query = query.ilike('category', `%${category}%`);
+    query = query.eq('category', category);
   }
 
   // Search
