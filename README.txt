@@ -41,4 +41,36 @@ game-detail.html  รายละเอียดเกม (เข้าถึง
 
 ช่องค้นหาบน nav ของทุกหน้า พิมพ์แล้วกด Enter จะพาไปหน้า search.html พร้อมคำค้นหานั้นทันที
 
-ไม่มีระบบ login/สมัครสมาชิกในโปรเจกต์นี้ตามที่ตั้งใจไว้
+=== ระบบบัญชีผู้ใช้ ===
+
+หน้า frontend/auth.html รองรับสมัครสมาชิก/เข้าสู่ระบบด้วยอีเมลและรหัสผ่าน
+รวมถึง Google OAuth ผ่าน Supabase Auth โดยไม่ต้องเพิ่ม endpoint สำหรับรหัสผ่านใน backend
+
+ตั้งค่า frontend/auth-config.js ด้วยค่า Supabase Project URL และ public anon key
+จาก Supabase Dashboard > Project Settings > API Keys (ห้ามใส่ secret/service-role key ใน frontend)
+
+ตั้งค่า Supabase Dashboard > Authentication:
+1. เปิด Email provider และกำหนดว่าจะต้องยืนยันอีเมลก่อนเข้าใช้งานหรือไม่
+2. เปิด Google provider พร้อม Client ID/Client Secret จาก Google Cloud Console
+3. เพิ่ม URL ของหน้าเว็บ (เช่น http://localhost:5500/auth.html และ URL production)
+   ใน Authentication > URL Configuration > Redirect URLs
+4. ตั้งค่า Authorized redirect URI ใน Google Cloud เป็น
+   https://<project-ref>.supabase.co/auth/v1/callback
+
+ทดสอบผ่าน Live Server หรือเว็บเซิร์ฟเวอร์ที่ใช้ http/https แทนการเปิดไฟล์ด้วย file://
+
+=== ความคิดเห็นใต้รายละเอียดเกม ===
+
+1. เปิด Supabase Dashboard > SQL Editor
+2. ถ้าเคยสร้างตารางแล้ว ให้คัดลอกและรัน SQL ฉบับล่าสุดจากไฟล์ supabase-comments.sql
+   เพื่ออัปเดต policy/trigger และตั้งค่าดาวส่วนตัวของเจ้าของคอมเมนต์
+   (ตาราง games ต้องมีอยู่ก่อนแล้ว)
+3. เปิดหน้า game-detail.html?id=<รหัสเกม> และเข้าสู่ระบบเพื่อโพสต์ความคิดเห็น
+
+ความคิดเห็นจะแยกตาม game_id; เปิดหน้าเกมแต่ละเกมเพื่อดูเฉพาะความคิดเห็นของเกมนั้น
+ทุกคนอ่านได้ แต่เฉพาะผู้ใช้ที่เข้าสู่ระบบโพสต์และลบความคิดเห็นของตัวเองได้
+เจ้าของคอมเมนต์ที่เข้าสู่ระบบเท่านั้นที่กำหนดดาว 1–5 ให้คอมเมนต์ตัวเองได้
+ผู้ใช้อื่นเห็นดาวแต่กดไม่ได้ และไม่มีระบบคะแนนรวมหรือค่าเฉลี่ย
+ฐานข้อมูลจะกำหนดชื่อและอีเมลจากบัญชีที่ยืนยันตัวตนโดยอัตโนมัติ
+ชื่อและอีเมลของผู้โพสต์จะแสดงต่อสาธารณะตามรูปแบบที่ขอ อย่าโพสต์ด้วยบัญชีที่ไม่ต้องการ
+เปิดเผยอีเมลให้ผู้เข้าชมเว็บไซต์ทุกคน
